@@ -1,6 +1,7 @@
 package com.login.pak;
 
 import java.awt.EventQueue;
+
 import java.awt.FlowLayout;
 
 
@@ -21,17 +22,21 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.JPasswordField;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
-import java.util.List;
+
 import java.util.ArrayList;
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
+import java.sql.DriverManager;
 
-import com.sql.pak.*;
 public class SignUp extends JFrame {
 
 	public record ArrayList() {
@@ -76,14 +81,35 @@ public class SignUp extends JFrame {
 		});
 		
 	}
-
+     Connection con;
+	
+	PreparedStatement pst;
 	/**
 	 * Create the frame.
 	 */
+	public void Connect()
+    {
+        try {
+            
+        	Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/weddinggo", "root","");
+        }
+        catch (ClassNotFoundException ex) 
+        {
+          ex.printStackTrace();
+        }
+        catch (SQLException ex) 
+        {
+               ex.printStackTrace();
+        }
+
+    }
+	
+	
+	
 	public SignUp() {
 		
-		Connect.ConnectSQL();
-		
+		Connect();
 		
 		setTitle("Wedding GO (beta)");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(SignUp.class.getResource("/icon/logo.png")));
@@ -240,12 +266,60 @@ public class SignUp extends JFrame {
         
         JButton SignUpButton = new JButton("Sign Up");
         SignUpButton.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		String username = newUsernameText.getText();
-        		String email = newEmailText.getText();
-        		char password[] = passwordField.getPassword();
-        		String phonenumber = newPhoneNumberText.getText();
-        	}
+            public void actionPerformed(ActionEvent e) {
+            	String username = newUsernameText.getText().trim();
+                String email = newEmailText.getText().trim();
+                char[] passwordChars = passwordField.getPassword();
+                char[] passwordRe  =  repasswordField.getPassword();
+                String password = new String(passwordChars);
+                String password2 = new String(passwordRe);
+                String phoneNumber = newPhoneNumberText.getText().trim();
+                if (!password.equals(password2)) {
+                	JOptionPane.showMessageDialog(null, "Password and Re-Password not matching.");
+                }
+                else {
+                // Check if required fields are empty
+                if (username.isEmpty() || email.isEmpty() || password.isEmpty() || phoneNumber.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please fill in all required fields.");
+                } 
+                
+                else {
+                    // Continue with registration
+                    String dob = yearComboBox.getSelectedItem() + "-" + (monthComboBox.getSelectedIndex() + 1) + "-" + dateComboBox.getSelectedItem();
+                    String gender = Male.isSelected() ? "Male" : (Female.isSelected() ? "Female" : "Others");
+
+                    // Insert data into the database
+                    try {
+                        // Ensure that the 'con' variable is not null
+                        if (con != null) {
+                            pst = con.prepareStatement("INSERT INTO useraccounts (username, email, password, phone, dob, gender) VALUES (?, ?, ?, ?, ?, ?)");
+
+                            pst.setString(1, username);
+                            pst.setString(2, email);
+                            pst.setString(3, password);
+                            pst.setString(4, phoneNumber);
+                            pst.setString(5, dob);
+                            pst.setString(6, gender);
+
+                            int rowsInserted = pst.executeUpdate();
+                            if (rowsInserted > 0) {
+                                JOptionPane.showMessageDialog(null, "Account Created. Enjoy our App!");
+                                Login in = new Login();
+                				in.show();
+                				dispose();
+                                
+                            } else {
+                                JOptionPane.showMessageDialog(null, "User-registration failed.");
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Database connection is not established.");
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+            }
         });
         SignUpButton.setFont(new Font("Unispace", Font.PLAIN, 11));
         SignUpButton.setBounds(471, 632, 89, 23);

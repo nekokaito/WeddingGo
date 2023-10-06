@@ -16,6 +16,12 @@ import javax.swing.JPasswordField;
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Arrays;
 import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
 
@@ -40,11 +46,39 @@ public class Login extends JFrame {
 			}
 		});
 	}
+    Connection con;
+	PreparedStatement pst;
+	ResultSet rs;
+	
+
+	public void Connect()
+    {
+        try {
+            
+        	Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost/weddinggo", "root","");
+        }
+        catch (ClassNotFoundException ex) 
+        {
+          ex.printStackTrace();
+        }
+        catch (SQLException ex) 
+        {
+               ex.printStackTrace();
+        }
+
+    }
+    
+
+
 
 	/**
 	 * Create the frame.
 	 */
 	public Login() {
+
+		Connect();
+
 		setTitle("Wedding GO (beta)");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/icon/logo.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -103,25 +137,36 @@ public class Login extends JFrame {
 		JButton Login_Home = new JButton("Login");
 		Login_Home.setFont(new Font("Unispace", Font.PLAIN, 11));
 		Login_Home.addActionListener(new ActionListener() {
-			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
-				String getUsername = Username.getText();
+			try {
+				String username = Username.getText();
+				char[] pass = Password.getPassword();
 				
-				String getPassword = Password.getText();
+				pst = con.prepareStatement("SELECT password FROM useraccounts WHERE username=?");
+				pst.setString(1, username);
+				ResultSet rs = pst.executeQuery();
 				
-				if (getUsername.equals("admin") && getPassword.equals("12345")) {
-					JOptionPane.showMessageDialog(null, "Login.......");
-					Dashboard in = new Dashboard();
-					in.show();
-					dispose();
-				}
-				else {
-					JOptionPane.showMessageDialog(null, "Incorrect Password");
-				}
-				
+				if (rs.next()) {
+	                char[] passDB = rs.getString(1).toCharArray();
+	                
+	                if (Arrays.equals(pass, passDB)) {
+	                    JOptionPane.showMessageDialog(null, "Login Approved");
+	                    Dashboard in = new Dashboard();
+	                    in.show();
+	                    dispose();
+	                } else {
+	                    JOptionPane.showMessageDialog(null, "Passwords do not match"); // Add this line for debugging
+	                }
+	            } else {
+	                JOptionPane.showMessageDialog(null, "User not found"); // Add this line for debugging
+	            }
+	        } catch (SQLException e2) {
+	            e2.printStackTrace();			}
 			}
 			
 		});
+			
+				
 		Login_Home.setBounds(104, 366, 89, 23);
 		contentPane.add(Login_Home);
 		

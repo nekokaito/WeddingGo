@@ -1,6 +1,9 @@
 package com.dashboard.pak;
 
 import java.awt.EventQueue;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 
 import com.start.pak.*;
@@ -34,6 +37,7 @@ public class Dashboard extends JFrame {
 				}
 			}
 		});
+		
 	}
 
 	/**
@@ -55,10 +59,10 @@ public class Dashboard extends JFrame {
 		lblNewLabel.setBounds(31, 40, 262, 41);
 		contentPane.add(lblNewLabel);
 		
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon(Dashboard.class.getResource("/icon/logo.png")));
-		lblNewLabel_1.setBounds(612, 27, 257, 223);
-		contentPane.add(lblNewLabel_1);
+		JLabel WeddingGoLogo = new JLabel("");
+		WeddingGoLogo.setIcon(new ImageIcon(Dashboard.class.getResource("/icon/logo.png")));
+		WeddingGoLogo.setBounds(612, 27, 257, 223);
+		contentPane.add(WeddingGoLogo);
 		
 		JButton btnNewButton = new JButton("Sign Out");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -72,19 +76,123 @@ public class Dashboard extends JFrame {
 		btnNewButton.setBounds(31, 455, 89, 23);
 		contentPane.add(btnNewButton);
 		
-		JLabel lblNewLabel_2 = new JLabel("We regret to inform you that our dashboard service is currently unavailable");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_2.setBounds(44, 132, 489, 41);
-		contentPane.add(lblNewLabel_2);
-		
-		JLabel lblNewLabel_3 = new JLabel("as we are in the beta testing process to improve the overall functionality of Wedding Go.");
-		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_3.setBounds(44, 185, 599, 14);
-		contentPane.add(lblNewLabel_3);
-		
 		JLabel lblNewLabel_4 = new JLabel("");
 		lblNewLabel_4.setIcon(new ImageIcon(Dashboard.class.getResource("/com/login/pak/Title.png")));
 		lblNewLabel_4.setBounds(625, 418, 244, 46);
 		contentPane.add(lblNewLabel_4);
+		
+		JLabel GuestLists = new JLabel("aa");
+		GuestLists.setIcon(new ImageIcon(Dashboard.class.getResource("/icon/Guest.png")));
+		GuestLists.setBounds(57, 132, 109, 98);
+		contentPane.add(GuestLists);
+		GuestLists.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                GuestList in = new GuestList();
+                in.show();
+                dispose();
+            }
+        });
+		
+		JLabel StaffList = new JLabel("New label");
+		StaffList.setIcon(new ImageIcon(Dashboard.class.getResource("/icon/Staff.png")));
+		StaffList.setBounds(227, 132, 109, 98);
+		contentPane.add(StaffList);
+		StaffList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            	StaffList in = new StaffList();
+                in.show();
+                dispose();
+            }
+        });
+		
+		JLabel VendorList = new JLabel("New label");
+		VendorList.setIcon(new ImageIcon(Dashboard.class.getResource("/icon/vendor.png")));
+		VendorList.setBounds(57, 297, 109, 98);
+		contentPane.add(VendorList);
+		VendorList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            	VendorList in = new VendorList();
+                in.show();
+                dispose();
+            }
+        });
+		
+		JLabel AboutUs = new JLabel("New label");
+		AboutUs.setIcon(new ImageIcon(Dashboard.class.getResource("/icon/dark_weddinggo.png")));
+		AboutUs.setBounds(226, 298, 109, 98);
+		contentPane.add(AboutUs);
+		AboutUs.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                 String url = "https://github.com/nekokaito/WeddingGo";
+                
+                try {
+                    
+                    Desktop.getDesktop().browse(new java.net.URI(url));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+		
+		JLabel GuestList_Text = new JLabel("Guest");
+		GuestList_Text.setFont(new Font("Unispace", Font.PLAIN, 11));
+		GuestList_Text.setBounds(93, 227, 46, 14);
+		contentPane.add(GuestList_Text);
+		GuestList_Text.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            	GuestList in = new GuestList();
+                in.show();
+                dispose();
+            }
+        });
+		
+		JLabel StaffList_Text = new JLabel("Staff");
+		StaffList_Text.setFont(new Font("Unispace", Font.PLAIN, 11));
+		StaffList_Text.setBounds(270, 227, 46, 14);
+		contentPane.add(StaffList_Text);
+		StaffList_Text.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            	StaffList in = new StaffList();
+                in.show();
+                dispose();
+            }
+        });
+		
+		JLabel VendorList_Text = new JLabel("Vendor");
+		VendorList_Text.setFont(new Font("Unispace", Font.PLAIN, 11));
+		VendorList_Text.setBounds(93, 406, 46, 14);
+		contentPane.add(VendorList_Text);
+		VendorList_Text.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            	VendorList in = new VendorList();
+                in.show();
+                dispose();
+            }
+        });
+		
+		JLabel AboutUs_Text = new JLabel("AboutUs");
+		AboutUs_Text.setFont(new Font("Unispace", Font.PLAIN, 11));
+		AboutUs_Text.setBounds(259, 406, 77, 14);
+		contentPane.add(AboutUs_Text);
+		AboutUs_Text.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+String url = "https://github.com/nekokaito/WeddingGo";
+                
+                try {
+                    
+                    Desktop.getDesktop().browse(new java.net.URI(url));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
 	}
 }
